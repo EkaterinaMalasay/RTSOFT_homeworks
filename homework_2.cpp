@@ -186,15 +186,17 @@ int run(char* argv[]) {
 	  cvMorphologyEx( frame_c1[0], frame_c1[0], NULL, kern, CV_MOP_OPEN , 1 );
 
 	  cvCanny( frame_c1[0],frame_c1[0], 100,200,3);
-////////////////////////////////////////////////////////////////
+
+     ////////////////////////////////////////////////////////////////
 	  find_rect();
+	  //find_circle();
 	  
 	  cvShowImage( WIN_RES, frame_c1[0] ); 
 	  cvShowImage( WIN_SRC, frame_c3[0]); 
 
  	  if(iswriter){ cvWriteFrame(writer, frame_c3[0]); } // пишем видео
 
-	  if( cvWaitKey(10) == ESC_KEY ) break;
+	  if( (char) cv::waitKey(33) >= 0 ) break;
    }
    return 0;
 }
@@ -290,7 +292,7 @@ int find_rect() {
    CvSeq* c;
    Point2f vtx[4];
    RotatedRect box;
-CvRect rect;
+   CvRect rect;
 
    cvClearMemStorage(storage);
    cvFindContours(frame_c1[0],storage,&contours,sizeof(CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE,cvPoint(0,0) );
@@ -298,7 +300,7 @@ CvRect rect;
    for(; contours!=0; contours = contours->h_next) {
 	rect = cvBoundingRect(contours, 0);
 
-	cvRectangle(frame_c1[0], cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width,rect.y+rect.height), cvScalar(0,0,255,0), 2,8,0);
+	cvRectangle(frame_c3[0], cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width,rect.y+rect.height), cvScalar(0,0,255,0), 2,8,0);
 }
 
    return 0;
